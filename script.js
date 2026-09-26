@@ -1,3 +1,53 @@
+// ================================
+// FIREBASE — ANDIAMO
+// ================================
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+  query,
+  orderBy,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+// Конфігурація Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyD6H-qk1jB7WMXNZtwn4xmADjrXqEa-Y2M",
+  authDomain: "andiamo-58744.firebaseapp.com",
+  projectId: "andiamo-58744",
+  storageBucket: "andiamo-58744.firebasestorage.app",
+  messagingSenderId: "638709781858",
+  appId: "1:638709781858:web:49f94340ec838c22efc83b",
+  measurementId: "G-CYDE6BV4R4"
+};
+
+
+// Запускаємо Firebase
+const app = initializeApp(firebaseConfig);
+
+// Firebase Authentication
+const auth = getAuth(app);
+
+// Cloud Firestore
+const db = getFirestore(app);
+
+console.log("🔥 Firebase успішно підключено!");
+console.log("🔥 Firestore готовий:", db);
+console.log("🔥 Authentication готовий:", auth);
 let cart = [];
 
   function updateCartUI(){
