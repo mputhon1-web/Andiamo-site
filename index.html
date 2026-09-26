@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pizzeria Andiamo — Izon</title>
+
+    <meta
+        name="description"
+        content="Pizzeria Andiamo à Izon — pizzas artisanales, commandes à emporter et livraison."
+    >
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Work+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="header">
+
+        <div class="container header-inner">
+
+            <a href="#accueil" class="logo">
+                Pizzeria <span>Andiamo</span>
+            </a>
+
+            <nav class="nav">
+                <a href="#carte">Carte</a>
+                <a href="#apropos">À propos</a>
+                <a href="#contact">Contact</a>
+            </nav>
+
+            <div class="header-actions">
+
+                <a
+                    class="phone-button"
+                    href="tel:0557231756"
+                >
+                    05 57 23 17 56
+                </a>
+
+                <button
+                    class="cart-button"
+                    id="openCart"
+                    type="button"
+                >
+                    🛒
+                    <span id="cartCount">0</span>
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= HERO ================= -->
+
+    <main>
+
+        <section class="hero" id="accueil">
+
+            <div class="container hero-grid">
+
+                <div class="hero-content">
+
+                    <p class="eyebrow">
+                        Izon · Fait maison
+                    </p>
+
+                    <h1>
+                        Des pizzas artisanales,
+                        <span>cuites avec le sourire.</span>
+                    </h1>
+
+                    <p class="hero-text">
+                        Une pâte préparée avec soin, des produits sélectionnés
+                        et des pizzas généreuses à déguster sur place ou à emporter.
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <a
+                            href="#carte"
+                            class="button button-primary"
+                        >
+                            Voir la carte
+                        </a>
+
+                        <a
+                            href="tel:0557231756"
+                            class="button button-secondary"
+                        >
+                            Appeler
+                        </a>
+
+                    </div>
+
+                    <p class="demo-label">
+                        Site de démonstration
+                    </p>
+
+                </div>
+
+
+                <div class="hero-image">
+
+                    <img
+                        src="images/hero_building.jpg"
+                        alt="Pizzeria Andiamo à Izon"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= À PROPOS ================= -->
+
+        <section class="about section" id="apropos">
+
+            <div class="container about-grid">
+
+                <div class="about-image">
+
+                    <img
+                        src="images/staff.jpg"
+                        alt="Équipe de la Pizzeria Andiamo"
+                    >
+
+                </div>
+
+                <div class="about-content">
+
+                    <p class="eyebrow">
+                        Notre histoire
+                    </p>
+
+                    <h2>
+                        Une pizzeria de quartier
+                    </h2>
+
+                    <p>
+                        Chez Andiamo, chaque pizza est préparée à la commande.
+                        La pâte est travaillée sur place et les garnitures sont
+                        choisies pour proposer une cuisine simple, généreuse
+                        et conviviale.
+                    </p>
+
+                    <p>
+                        Notre objectif est simple : vous proposer un bon repas,
+                        rapidement, avec un accueil chaleureux.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CARTE ================= -->
+
+        <section class="menu section" id="carte">
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <p class="eyebrow">
+                        La carte
+                    </p>
+
+                    <h2>
+                        Nos pizzas & gourmandises
+                    </h2>
+
+                    <p>
+                        Prix indicatifs — à remplacer par les prix réels
+                        de l'établissement.
+                    </p>
+
+                </div>
+
+
+                <!-- PIZZAS CLASSIQUES -->
+
+                <div class="menu-category">
+
+                    <h3>
+                        Pizzas classiques
+                    </h3>
+
+                    <div class="menu-grid">
+
+                        <article class="menu-card">
+
+                            <div>
+                                <h4>Margherita</h4>
+
+                                <p>
+                                    Tomate, mozzarella, basilic
+                                </p>
+                            </div>
+
+                            <div class="menu-card-bottom">
+
+                                <strong>9,50 €</strong>
+
+                                <button
+                                    type="button"
+                                    onclick="addToCart('Margherita', 9.50)"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </article>
+
+
+                        <article class="menu-card">
+
+                            <div>
+                                <h4>Reine</h4>
+
+                                <p>
+                                    Tomate, mozzarella, jambon, champignons
+                                </p>
+                            </div>
+
+                            <div class="menu-card-bottom">
+
+                                <strong>11,50 €</strong>
+
+                                <button
+                                    type="button"
+                                    onclick="addToCart('Reine', 11.50)"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </article>
+
+
+                        <article class="menu-card">
+
+                            <div>
+                                <h4>Végétarienne</h4>
+
+                                <p>
+                                    Tomate, mozzarella, légumes
+                                </p>
+                            </div>
+
+                            <div class="menu-card-bottom">
+
+                                <strong>11,50 €</strong>
+
+                                <button
+                                    type="button"
+                                    onclick="addToCart('Végétarienne', 11.50)"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </article>
+
+
+                        <article class="menu-card">
+
+                            <div>
+                                <h4>4 Fromages</h4>
+
+                                <p>
+                                    Mozzarella, chèvre, bleu, emmental
+                                </p>
+                            </div>
+
+                            <div class="menu-card-bottom">
+
+                                <strong>12,50 €</strong>
+
+                                <button
+                                    type="button"
+                                    onclick="addToCart('4 Fromages', 12.50)"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PIZZAS SPÉCIALES -->
+
+                <div class="menu-category">
+
+                    <h3>
+                        Pizzas spéciales
+                    </h3>
+
+                    <div class="menu-grid">
+
+                        <article class="menu-card">
+
+                            <div>
+                                <h4>Chèvre miel</h4>
+
+                                <p>
+                                    Chèvre, mozzarella, miel
+                                </p>
+                            </div>
+
+                            <div class="menu-card-bottom">
+
+                                <strong>12,90 €</strong>
+
+                                <button
+                                    type="button"
+                                    onclick="addToCart('Chèvre miel', 12.90)"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </article>
+
+
+                        <article class="menu-card">
+
+                            <div>
+                                <h4>Mortadelle & olives</h4>
+
+                                <p>
+                                    Mortadelle, mozzarella, olives
+                                </p>
+                            </div>
+
+                            <div class="menu-card-bottom">
+
+                                <strong>12,50 €</strong>
+
+                                <button
+                                    type="button"
+                                    onclick="addToCart('Mortadelle & olives', 12.50)"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </article>
+
+
+                        <article class="menu-card">
+
+                            <div>
+                                <h4>Calzone</h4>
+
+                                <p>
+                                    Pizza fermée, jambon, fromage
+                                </p>
+                            </div>
+
+                            <div class="menu-card-bottom">
+
+                                <strong>12,00 €</strong>
+
+                                <button
+                                    type="button"
+                                    onclick="addToCart('Calzone', 12.00)"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SNACKING -->
+
+                <div class="menu-category">
+
+                    <h3>
+                        Snacking
+                    </h3>
+
+                    <div class="menu-grid">
+
+                        <article class="menu-card">
+
+                            <div>
+                                <h4>Kebab frites</h4>
+
+                                <p>
+                                    Kebab, crudités, sauce, frites
+                                </p>
+                            </div>
+
+                            <div class="menu-card-bottom">
+
+                                <strong>9,00 €</strong>
+
+                                <button
+                                    type="button"
+                                    onclick="addToCart('Kebab frites', 9.00)"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </article>
+
+
+                        <article class="menu-card">
+
+                            <div>
+                                <h4>Boisson 33cl</h4>
+
+                                <p>
+                                    Boisson fraîche
+                                </p>
+                            </div>
+
+                            <div class="menu-card-bottom">
+
+                                <strong>2,50 €</strong>
+
+                                <button
+                                    type="button"
+                                    onclick="addToCart('Boisson 33cl', 2.50)"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= GALERIE ================= -->
+
+        <section class="gallery section">
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <p class="eyebrow">
+                        Chez Andiamo
+                    </p>
+
+                    <h2>
+                        Simple, généreux, gourmand.
+                    </h2>
+
+                </div>
+
+
+                <div class="gallery-grid">
+
+                    <img
+                        src="images/pizza-olive.jpg"
+                        alt="Pizza aux olives"
+                    >
+
+                    <img
+                        src="images/pizza-cheese.jpg"
+                        alt="Pizza au fromage"
+                    >
+
+                    <img
+                        src="images/kebab.jpg"
+                        alt="Kebab avec frites"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CONTACT ================= -->
+
+        <section class="contact section" id="contact">
+
+            <div class="container contact-grid">
+
+                <div>
+
+                    <p class="eyebrow">
+                        Nous trouver
+                    </p>
+
+                    <h2>
+                        Venez nous voir à Izon
+                    </h2>
+
+                    <p>
+                        Une question ? Une commande ?
+                        Contactez directement la pizzeria.
+                    </p>
+
+                </div>
+
+
+                <div class="contact-card">
+
+                    <div class="contact-item">
+
+                        <span>📞</span>
+
+                        <div>
+                            <strong>Téléphone</strong>
+                            <a href="tel:0557231756">
+                                05 57 23 17 56
+                            </a>
+                        </div>
+
+                    </div>
+
+
+                    <div class="contact-item">
+
+                        <span>📍</span>
+
+                        <div>
+                            <strong>Adresse</strong>
+
+                            <p>
+                                20 Av. du Général de Gaulle,
+                                33450 Izon
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="contact-item">
+
+                        <span>🕐</span>
+
+                        <div>
+
+                            <strong>Horaires</strong>
+
+                            <p>
+                                Mar–Sam : 11h–14h & 18h–21h<br>
+                                Dim : 18h–21h<br>
+                                Fermé le lundi
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ================= CART DRAWER ================= -->
+
+    <aside
+        class="cart-drawer"
+        id="cartDrawer"
+        aria-hidden="true"
+    >
+
+        <div class="cart-header">
+
+            <h2>
+                Votre commande
+            </h2>
+
+            <button
+                type="button"
+                id="closeCart"
+                aria-label="Fermer"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            class="cart-items"
+            id="cartItems"
+        >
+            <p class="empty-cart">
+                Votre panier est vide.
+            </p>
+        </div>
+
+
+        <div class="cart-footer">
+
+            <div class="cart-total">
+
+                <span>
+                    Total
+                </span>
+
+                <strong id="cartTotal">
+                    0,00 €
+                </strong>
+
+            </div>
+
+
+            <label>
+                Votre nom
+
+                <input
+                    type="text"
+                    id="customerName"
+                    placeholder="Nom"
+                >
+            </label>
+
+
+            <label>
+                Téléphone
+
+                <input
+                    type="tel"
+                    id="customerPhone"
+                    placeholder="06..."
+                >
+            </label>
+
+
+            <label>
+                Heure souhaitée
+
+                <input
+                    type="time"
+                    id="pickupTime"
+                >
+            </label>
+
+
+            <button
+                type="button"
+                class="button button-primary full-width"
+                id="checkoutButton"
+            >
+                Payer maintenant
+            </button>
+
+
+            <p class="demo-note">
+                Démonstration : aucun paiement réel n'est effectué.
+            </p>
+
+        </div>
+
+    </aside>
+
+
+    <div
+        class="cart-overlay"
+        id="cartOverlay"
+    ></div>
+
+
+    <!-- ================= ESPACE PROFESSIONNEL ================= -->
+
+    <section class="admin section">
+
+        <div class="container">
+
+            <div class="section-heading">
+
+                <p class="eyebrow">
+                    Démonstration
+                </p>
+
+                <h2>
+                    Espace professionnel
+                </h2>
+
+                <p>
+                    Interface de démonstration pour gérer les commandes.
+                </p>
+
+            </div>
+
+
+            <div class="admin-login">
+
+                <input
+                    type="email"
+                    id="adminEmail"
+                    placeholder="Email"
+                >
+
+                <input
+                    type="password"
+                    id="adminPassword"
+                    placeholder="Mot de passe"
+                >
+
+                <button
+                    type="button"
+                    class="button button-primary"
+                    id="adminLoginButton"
+                >
+                    Se connecter
+                </button>
+
+            </div>
+
+
+            <div
+                class="admin-panel"
+                id="adminPanel"
+                hidden
+            >
+
+                <div class="admin-top">
+
+                    <h3>
+                        Commandes
+                    </h3>
+
+                    <div>
+
+                        <button
+                            type="button"
+                            id="monthlyInvoice"
+                        >
+                            Facture mensuelle
+                        </button>
+
+                        <button
+                            type="button"
+                            id="yearlyInvoice"
+                        >
+                            Facture annuelle
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="kanban">
+
+                    <div class="kanban-column">
+
+                        <h4>
+                            Nouvelle
+                        </h4>
+
+                        <div
+                            id="newOrders"
+                            class="order-list"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="kanban-column">
+
+                        <h4>
+                            En préparation
+                        </h4>
+
+                        <div
+                            id="preparingOrders"
+                            class="order-list"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="kanban-column">
+
+                        <h4>
+                            Prête
+                        </h4>
+
+                        <div
+                            id="readyOrders"
+                            class="order-list"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <div class="container footer-inner">
+
+            <div>
+                <strong>
+                    Pizzeria Andiamo
+                </strong>
+
+                <p>
+                    Izon · Gironde
+                </p>
+            </div>
+
+
+            <div>
+
+                <a href="#accueil">
+                    Accueil
+                </a>
+
+                <a href="#carte">
+                    Carte
+                </a>
+
+                <a href="#contact">
+                    Contact
+                </a>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
