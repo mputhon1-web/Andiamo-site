@@ -1502,3 +1502,30 @@ Object.assign(window, {
 updateCartUI();
 
 populateTimeOptions();
+window.updateCartUI = updateCartUI;
+window.addToCart = addToCart;
+window.removeItem = removeItem;
+window.openCart = openCart;
+window.closeCart = closeCart;
+
+window.toggleAddressFields = toggleAddressFields;
+window.onAddressInput = onAddressInput;
+
+window.saveCustomerProfile = saveCustomerProfile;
+window.loadCustomerProfile = loadCustomerProfile;
+window.goToCheckout = goToCheckout;
+window.fakePay = fakePay;
+
+window.showAdminLogin = showAdminLogin;
+window.hideAdmin = hideAdmin;
+window.tryAdminLogin = tryAdminLogin;
+
+window.renderOrders = renderOrders;
+window.setStatus = setStatus;
+window.deleteOrder = deleteOrder;
+
+window.populateInvoiceSelects = populateInvoiceSelects;
+window.downloadInvoice = downloadInvoice;
+
+updateCartUI();
+populateTimeOptions();
