@@ -155,29 +155,77 @@ let cart = [];
     setTimeout(()=> document.getElementById('checkoutFields').scrollIntoView({behavior:'smooth', block:'start'}), 50);
   }
 
-  function fakePay(){
-    const name = document.getElementById('custName').value.trim() || 'Client';
-    const phone = document.getElementById('custPhone').value.trim();
-    const time = document.getElementById('custTime').value;
-    const orderType = document.querySelector('input[name="orderType"]:checked').value;
-    let address = '';
-    if(orderType === 'delivery'){
-      const a = document.getElementById('custAddress').value.trim();
-      const p = document.getElementById('custPostal').value.trim();
-      const c = document.getElementById('custCity').value.trim();
-      address = [a, p, c].filter(Boolean).join(', ');
-    }
-    if(cart.length===0) return;
-    const total = cart.reduce((s,i)=>s+i.price,0);
-    const order = {
-      id: 'CMD-' + Math.floor(1000+Math.random()*9000),
-      name, phone, time, orderType, address,
-      items: cart.map(i=>i.name),
-      total: total.toFixed(2),
-      status: 'new',
-      created: new Date().toLocaleString('fr-FR'),
-      timestamp: new Date().toISOString()
-    };
+  {async function fakePay(){
+  const name = document.getElementById('custName').value.trim() || 'Client';
+  const phone = document.getElementById('custPhone').value.trim();
+  const time = document.getElementById('custTime').value;
+  const orderType = document.querySelector('input[name="orderType"]:checked').value;
+
+  let address = '';
+
+  if(orderType === 'delivery'){
+    const a = document.getElementById('custAddress').value.trim();
+    const p = document.getElementById('custPostal').value.trim();
+    const c = document.getElementById('custCity').value.trim();
+
+    address = [a, p, c].filter(Boolean).join(', ');
+  }
+
+  if(cart.length === 0) return;
+
+  const total = cart.reduce((s, i) => s + i.price, 0);
+
+  const order = {
+    id: 'CMD-' + Math.floor(1000 + Math.random() * 9000),
+    name,
+    phone,
+    time,
+    orderType,
+    address,
+    items: cart.map(i => i.name),
+    total: total.toFixed(2),
+    status: 'new',
+    created: new Date().toLocaleString('fr-FR'),
+    timestamp: new Date().toISOString()
+  };
+
+  try {
+    await addDoc(collection(db, 'orders'), order);
+
+    saveCustomerProfile();
+
+    cart = [];
+    updateCartUI();
+    closeCart();
+
+    document.getElementById('custTime').selectedIndex = 0;
+    document.querySelector(
+      'input[name="orderType"][value="pickup"]'
+    ).checked = true;
+
+    toggleAddressFields();
+
+    const msg = orderType === 'delivery'
+      ? 'Paiement (démo) accepté !\nVotre commande ' +
+        order.id +
+        ' sera livrée à l\'adresse indiquée.'
+      : 'Paiement (démo) accepté !\nVotre commande ' +
+        order.id +
+        ' sera prête à récupérer sur place.';
+
+    alert(msg);
+
+    console.log('🔥 Commande enregistrée dans Firestore:', order);
+
+  } catch(error) {
+    console.error('❌ Erreur lors de l\'enregistrement:', error);
+
+    alert(
+      'Erreur : la commande n\'a pas pu être enregistrée. ' +
+      'Vérifiez votre connexion et réessayez.'
+    );
+  }
+};
     let orders = JSON.parse(localStorage.getItem('andiamo_orders') || '[]');
     orders.push(order);
     localStorage.setItem('andiamo_orders', JSON.stringify(orders));
