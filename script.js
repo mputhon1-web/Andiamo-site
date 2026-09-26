@@ -21,27 +21,107 @@ let cart = [];
   function addToCart(name, price){
     cart.push({name, price});
     updateCartUI();
-    openCart();
+    const fab = document.getElementById('cartFab');
+    fab.classList.remove('bump');
+    void fab.offsetWidth;
+    fab.classList.add('bump');
   }
   function removeItem(idx){ cart.splice(idx,1); updateCartUI(); }
 
   function openCart(){ document.getElementById('overlay').classList.add('open'); document.getElementById('drawer').classList.add('open'); updateCartUI(); }
   function closeCart(){ document.getElementById('overlay').classList.remove('open'); document.getElementById('drawer').classList.remove('open'); }
 
+  function toggleAddressFields(){
+    const isDelivery = document.querySelector('input[name="orderType"]:checked').value === 'delivery';
+    document.getElementById('addressFields').classList.toggle('open', isDelivery);
+  }
+
+  // Suggestions d'adresse (API Adresse - data.gouv.fr, gratuite, sans clé).
+  // Fonctionne une fois le site hébergé sur votre propre domaine (GitHub Pages) ;
+  // peut être bloqué dans certains aperçus (ex. artefact claude.ai).
+  let addrTimer = null;
+  function onAddressInput(){
+    clearTimeout(addrTimer);
+    const q = document.getElementById('custAddress').value.trim();
+    const box = document.getElementById('addrSuggestions');
+    if(q.length < 3){ box.classList.remove('open'); box.innerHTML=''; return; }
+    addrTimer = setTimeout(async ()=>{
+      try{
+        const res = await fetch('https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(q) + '&limit=5');
+        const data = await res.json();
+        box.innerHTML = '';
+        (data.features || []).forEach(f=>{
+          const p = f.properties;
+          const div = document.createElement('div');
+          div.textContent = p.label;
+          div.onclick = ()=>{
+            document.getElementById('custAddress').value = p.name || p.label;
+            document.getElementById('custPostal').value = p.postcode || '';
+            document.getElementById('custCity').value = p.city || '';
+            box.classList.remove('open');
+            box.innerHTML = '';
+          };
+          box.appendChild(div);
+        });
+        box.classList.toggle('open', (data.features||[]).length > 0);
+      } catch(err){
+        box.classList.remove('open');
+      }
+    }, 300);
+  }
+  document.addEventListener('click', function(e){
+    if(!e.target.closest('.addr-wrap')){
+      document.getElementById('addrSuggestions').classList.remove('open');
+    }
+  });
+
+  // Profil client mémorisé sur cet appareil (nom, téléphone, adresse) - jamais les commandes ni le paiement.
+  function saveCustomerProfile(){
+    const profile = {
+      name: document.getElementById('custName').value.trim(),
+      phone: document.getElementById('custPhone').value.trim(),
+      address: document.getElementById('custAddress').value.trim(),
+      postal: document.getElementById('custPostal').value.trim(),
+      city: document.getElementById('custCity').value.trim(),
+    };
+    localStorage.setItem('andiamo_customer', JSON.stringify(profile));
+  }
+  function loadCustomerProfile(){
+    try{
+      const p = JSON.parse(localStorage.getItem('andiamo_customer') || 'null');
+      if(!p) return;
+      document.getElementById('custName').value = p.name || '';
+      document.getElementById('custPhone').value = p.phone || '';
+      document.getElementById('custAddress').value = p.address || '';
+      document.getElementById('custPostal').value = p.postal || '';
+      document.getElementById('custCity').value = p.city || '';
+    } catch(err){}
+  }
+
   function goToCheckout(){
     if(cart.length===0) return;
     document.getElementById('checkoutFields').classList.add('open');
+    loadCustomerProfile();
+    setTimeout(()=> document.getElementById('checkoutFields').scrollIntoView({behavior:'smooth', block:'start'}), 50);
   }
 
   function fakePay(){
     const name = document.getElementById('custName').value.trim() || 'Client';
     const phone = document.getElementById('custPhone').value.trim();
     const time = document.getElementById('custTime').value;
+    const orderType = document.querySelector('input[name="orderType"]:checked').value;
+    let address = '';
+    if(orderType === 'delivery'){
+      const a = document.getElementById('custAddress').value.trim();
+      const p = document.getElementById('custPostal').value.trim();
+      const c = document.getElementById('custCity').value.trim();
+      address = [a, p, c].filter(Boolean).join(', ');
+    }
     if(cart.length===0) return;
     const total = cart.reduce((s,i)=>s+i.price,0);
     const order = {
       id: 'CMD-' + Math.floor(1000+Math.random()*9000),
-      name, phone, time,
+      name, phone, time, orderType, address,
       items: cart.map(i=>i.name),
       total: total.toFixed(2),
       status: 'new',
@@ -51,13 +131,22 @@ let cart = [];
     let orders = JSON.parse(localStorage.getItem('andiamo_orders') || '[]');
     orders.push(order);
     localStorage.setItem('andiamo_orders', JSON.stringify(orders));
+    saveCustomerProfile();
     cart = [];
     updateCartUI();
     closeCart();
-    alert('Paiement (démo) accepté !\nVotre commande ' + order.id + ' a été envoyée à la pizzeria.');
+    document.getElementById('custTime').selectedIndex = 0;
+    document.querySelector('input[name="orderType"][value="pickup"]').checked = true;
+    toggleAddressFields();
+    const msg = orderType === 'delivery'
+      ? 'Paiement (démo) accepté !\nVotre commande ' + order.id + ' sera livrée à l\'adresse indiquée.'
+      : 'Paiement (démo) accepté !\nVotre commande ' + order.id + ' sera prête à récupérer sur place.';
+    alert(msg);
   }
 
   // ADMIN
+  let refreshTimer = null;
+  let currentRole = null; // 'admin' (gérante) ou 'staff' (cuisine)
   function showAdminLogin(){
     document.getElementById('siteView').classList.add('hidden');
     document.getElementById('adminView').classList.add('open');
@@ -67,18 +156,39 @@ let cart = [];
   function hideAdmin(){
     document.getElementById('siteView').classList.remove('hidden');
     document.getElementById('adminView').classList.remove('open');
+    if(refreshTimer){ clearInterval(refreshTimer); refreshTimer = null; }
+    currentRole = null;
+    document.getElementById('adminPanel').classList.remove('staff-mode');
   }
   function tryAdminLogin(){
     const pass = document.getElementById('adminPass').value;
-    if(pass === 'andiamo'){
+    if(pass === 'andiamo' || pass === 'cuisine'){
+      currentRole = (pass === 'andiamo') ? 'admin' : 'staff';
+      const panel = document.getElementById('adminPanel');
+      panel.classList.toggle('staff-mode', currentRole === 'staff');
+      document.getElementById('adminBarTitle').textContent =
+        currentRole === 'admin' ? 'Commandes — Pizzeria Andiamo' : 'Cuisine — Pizzeria Andiamo';
       document.getElementById('adminLogin').style.display = 'none';
-      document.getElementById('adminPanel').style.display = 'block';
+      panel.style.display = 'block';
       renderOrders();
-      populateInvoiceSelects();
+      if(currentRole === 'admin') populateInvoiceSelects();
+      if(refreshTimer) clearInterval(refreshTimer);
+      refreshTimer = setInterval(renderOrders, 30000);
     } else {
-      alert('Mot de passe incorrect (démo : "andiamo")');
+      alert('Mot de passe incorrect (démo : "andiamo" ou "cuisine")');
     }
   }
+  // Si une commande est passée depuis un autre onglet de ce même navigateur,
+  // l'espace se met à jour immédiatement (sans attendre les 30 secondes).
+  // Entre deux appareils différents (le téléphone d'un client et l'ordinateur
+  // de la pizzeria), ce mécanisme ne peut pas fonctionner : chaque appareil a
+  // son propre stockage local. Une vraie synchronisation entre appareils
+  // demande une base de données en ligne (étape suivante, hors démo).
+  window.addEventListener('storage', function(e){
+    if(e.key === 'andiamo_orders' && document.getElementById('adminPanel').style.display === 'block'){
+      renderOrders();
+    }
+  });
 
   function renderOrders(){
     let orders = JSON.parse(localStorage.getItem('andiamo_orders') || '[]');
@@ -93,12 +203,18 @@ let cart = [];
       if(o.status==='new') moveBtns += `<button class="mv" onclick="setStatus(${idx},'progress')">En préparation</button>`;
       if(o.status==='progress') moveBtns += `<button class="mv" onclick="setStatus(${idx},'done')">Marquer prête</button>`;
       if(o.status==='done') moveBtns += `<button class="mv" onclick="setStatus(${idx},'progress')">Rouvrir</button>`;
+      const deleteBtn = currentRole === 'admin'
+        ? `<button class="del" onclick="deleteOrder(${idx})">Supprimer</button>` : '';
+      const typeLabel = o.orderType === 'delivery'
+        ? '🚴 Livraison — ' + (o.address || 'adresse non précisée')
+        : '🏠 Retrait sur place';
       card.innerHTML = `
         <div class="oid">${o.id} — ${o.total} €</div>
         <div style="font-size:0.8rem; opacity:.7;">${o.name}${o.phone? ' · '+o.phone:''}</div>
+        <div style="font-size:0.78rem; margin-top:4px;">${typeLabel}</div>
         <ul>${o.items.map(i=>'<li>'+i+'</li>').join('')}</ul>
-        <div style="font-size:0.78rem;">Retrait souhaité : <strong>${o.time || 'non précisé'}</strong></div>
-        <div class="oactions">${moveBtns}<button class="del" onclick="deleteOrder(${idx})">Supprimer</button></div>
+        <div style="font-size:0.78rem;">Heure souhaitée : <strong>${o.time || 'non précisée'}</strong></div>
+        <div class="oactions">${moveBtns}${deleteBtn}</div>
       `;
       cols[o.status].appendChild(card);
     });
@@ -140,21 +256,25 @@ let cart = [];
   }
 
   function downloadInvoice(kind){
-    const orders = JSON.parse(localStorage.getItem('andiamo_orders') || '[]').filter(o=>o.timestamp);
+    if(!window.jspdf || !window.jspdf.jsPDF){
+      alert('La bibliothèque PDF n\'a pas pu se charger (vérifiez la connexion internet), puis rechargez la page et réessayez.');
+      return;
+    }
+    const parseDate = o => o.timestamp ? new Date(o.timestamp) : new Date(o.created);
+    const orders = JSON.parse(localStorage.getItem('andiamo_orders') || '[]')
+      .map(o => ({...o, _date: parseDate(o)}))
+      .filter(o => !isNaN(o._date));
     let filtered, label, slug;
     if(kind === 'month'){
       const val = document.getElementById('monthSelect').value; // YYYY-MM
       const [y,m] = val.split('-');
-      filtered = orders.filter(o=>{
-        const d = new Date(o.timestamp);
-        return d.getFullYear()===parseInt(y) && (d.getMonth()+1)===parseInt(m);
-      });
+      filtered = orders.filter(o=> o._date.getFullYear()===parseInt(y) && (o._date.getMonth()+1)===parseInt(m));
       const monthIdx = parseInt(m)-1;
       label = FR_MONTHS[monthIdx] + ' ' + y;
       slug = val;
     } else {
       const y = document.getElementById('yearSelect').value;
-      filtered = orders.filter(o=> new Date(o.timestamp).getFullYear()===parseInt(y));
+      filtered = orders.filter(o=> o._date.getFullYear()===parseInt(y));
       label = 'Année ' + y;
       slug = y;
     }
@@ -182,11 +302,11 @@ let cart = [];
     y += 8;
 
     let total = 0;
-    filtered.sort((a,b)=> new Date(a.timestamp) - new Date(b.timestamp));
+    filtered.sort((a,b)=> a._date - b._date);
     filtered.forEach(o=>{
       if(y > 275){ doc.addPage(); y = 20; }
       doc.text(o.id, 14, y);
-      doc.text(new Date(o.timestamp).toLocaleDateString('fr-FR'), 90, y);
+      doc.text(o._date.toLocaleDateString('fr-FR'), 90, y);
       doc.text(o.total.replace('.',',') + ' €', 165, y);
       total += parseFloat(o.total);
       y += 7;
@@ -204,7 +324,49 @@ let cart = [];
     doc.setFontSize(8);
     doc.text('Document généré automatiquement à partir des commandes passées en ligne (site de démonstration).', 14, y);
 
-    doc.save('factures-andiamo-' + slug + '.pdf');
+    triggerDownload(doc, 'factures-andiamo-' + slug + '.pdf');
+  }
+
+  // Déclenche un vrai téléchargement (dossier Téléchargements sur ordinateur, stockage sur téléphone).
+  async function triggerDownload(doc, filename){
+    const blob = doc.output('blob');
+    try{
+      if(window.claude && window.claude.use){
+        const downloads = await window.claude.use('downloads');
+        if(downloads){
+          await downloads.save({filename, data: blob});
+          return;
+        }
+      }
+    } catch(err){
+      // pas grave, on retombe sur le téléchargement navigateur classique ci-dessous
+    }
+    try{
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(()=> URL.revokeObjectURL(url), 4000);
+    } catch(err){
+      // Repli : ouvre le PDF dans un nouvel onglet pour un enregistrement manuel.
+      doc.output('dataurlnewwindow');
+    }
+  }
+
+  function populateTimeOptions(){
+    const sel = document.getElementById('custTime');
+    sel.innerHTML = '<option value="">-- Choisir une heure --</option>';
+    for(let h = 11; h <= 21; h++){
+      for(let m = 0; m < 60; m += 15){
+        if(h === 21 && m > 45) continue;
+        const val = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+        sel.innerHTML += `<option value="${val}">${val}</option>`;
+      }
+    }
   }
 
   updateCartUI();
+  populateTimeOptions();
