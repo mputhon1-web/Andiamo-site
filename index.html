@@ -23,7 +23,6 @@
     </nav>
     <div style="display:flex; align-items:center;">
       <a class="call-btn" href="tel:+33557231756">Appeler</a>
-      <button class="cart-btn" onclick="openCart()">Panier<span class="cart-count" id="cartCount">0</span></button>
     </div>
   </div>
 </header>
@@ -125,6 +124,11 @@
 </footer>
 </div>
 
+<button class="cart-fab" id="cartFab" onclick="openCart()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+  <span id="cartCount">0</span>
+</button>
+
 <!-- CART OVERLAY -->
 <div class="overlay" id="overlay" onclick="closeCart()"></div>
 <div class="drawer" id="drawer">
@@ -138,8 +142,28 @@
     <input type="text" id="custName" placeholder="Votre nom">
     <label>Téléphone</label>
     <input type="tel" id="custPhone" placeholder="06 12 34 56 78">
-    <label>Heure de retrait souhaitée</label>
-    <input type="time" id="custTime">
+
+    <label>Comment récupérer votre commande ?</label>
+    <div class="order-type">
+      <label><input type="radio" name="orderType" value="pickup" checked onchange="toggleAddressFields()"><span>Je viens chercher</span></label>
+      <label><input type="radio" name="orderType" value="delivery" onchange="toggleAddressFields()"><span>Livraison</span></label>
+    </div>
+
+    <div class="address-fields" id="addressFields">
+      <label>Adresse de livraison</label>
+      <label style="font-weight:400; font-size:0.78rem; opacity:.7; margin-top:-4px;">Rue et numéro</label>
+      <div class="addr-wrap">
+        <input type="text" id="custAddress" placeholder="Ex. 12 rue de la Mairie" autocomplete="off" oninput="onAddressInput()">
+        <div class="addr-suggestions" id="addrSuggestions"></div>
+      </div>
+      <label style="font-weight:400; font-size:0.78rem; opacity:.7;">Code postal</label>
+      <input type="text" id="custPostal" placeholder="33450" autocomplete="postal-code">
+      <label style="font-weight:400; font-size:0.78rem; opacity:.7;">Ville</label>
+      <input type="text" id="custCity" placeholder="Izon" autocomplete="address-level2">
+    </div>
+
+    <label>Heure souhaitée</label>
+    <select id="custTime" style="width:100%; font:inherit; padding:10px 11px; border:1.5px solid color-mix(in srgb, var(--ink) 22%, transparent); border-radius:4px; background:var(--paper); color:var(--ink);"></select>
     <button class="btn btn-primary" onclick="fakePay()">Payer maintenant (démo)</button>
     <p style="font-size:0.72rem; opacity:.6;">Paiement fictif — aucune somme n'est prélevée. Ceci illustre le futur parcours de commande.</p>
   </div>
@@ -153,12 +177,12 @@
     <input type="email" id="adminEmail" placeholder="Adresse e-mail">
     <input type="password" id="adminPass" placeholder="Mot de passe">
     <button class="btn btn-primary" style="width:100%;" onclick="tryAdminLogin()">Se connecter</button>
-    <p style="font-size:0.72rem; opacity:.55; margin-top:10px;">Démo : n'importe quel e-mail + mot de passe « andiamo ».</p>
+    <p style="font-size:0.72rem; opacity:.55; margin-top:10px;">Démo : mot de passe « andiamo » pour la gérante, « cuisine » pour l'équipe en préparation.</p>
     <p style="margin-top:14px;"><a href="#" onclick="hideAdmin(); return false;" style="font-size:0.8rem;">&larr; Retour au site</a></p>
   </div>
   <div id="adminPanel" style="display:none;">
     <div class="admin-bar">
-      <strong>Commandes — Pizzeria Andiamo</strong>
+      <strong id="adminBarTitle">Commandes — Pizzeria Andiamo</strong>
       <a href="#" onclick="hideAdmin(); return false;">Retour au site</a>
     </div>
     <div class="invoices-bar">
@@ -186,12 +210,5 @@
 </div>
 
 <script src="script.js"></script>
-</body>
-</html>
-
-
-
-    <script src="script.js"></script>
-
 </body>
 </html>
