@@ -1,883 +1,194 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Pizzeria Andiamo — Izon</title>
-
-    <meta
-        name="description"
-        content="Pizzeria Andiamo à Izon — pizzas artisanales, commandes à emporter et livraison."
-    >
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Work+Sans:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pizzeria Andiamo — Izon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <!-- ================= HEADER ================= -->
+<div id="siteView">
+<header>
+  <div class="wrap headbar">
+    <div class="brand">Pizzeria <span>Andiamo</span></div>
+    <nav>
+      <a href="#menu">Carte</a>
+      <a href="#a-propos">À propos</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div style="display:flex; align-items:center;">
+      <a class="call-btn" href="tel:+33557231756">Appeler</a>
+      <button class="cart-btn" onclick="openCart()">Panier<span class="cart-count" id="cartCount">0</span></button>
+    </div>
+  </div>
+</header>
 
-    <header class="header">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Izon · Fait maison</p>
+      <h1>Des pizzas artisanales, cuites avec le sourire</h1>
+      <p>Pâte fraîche, produits sélectionnés, à emporter ou en livraison — retrouvez la pizzeria Andiamo au cœur d'Izon.<span class="demo-tag">Site de démonstration</span></p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#menu">Voir la carte</a>
+        <a class="btn btn-ghost" href="tel:+33557231756">05 57 23 17 56</a>
+      </div>
+    </div>
+    <div class="hero-img"><img src="images/hero_building.jpg" alt="Pizzeria Andiamo, façade"></div>
+  </div>
+</section>
 
-        <div class="container header-inner">
+<section id="a-propos" style="background:var(--cream-2);">
+  <div class="wrap about-grid">
+    <img src="images/staff.jpg" alt="L'équipe de la pizzeria Andiamo au fournil">
+    <div>
+      <p class="eyebrow">L'équipe</p>
+      <h2 class="section-title">Une pizzeria de quartier</h2>
+      <p>Chaque pizza est préparée à la commande, avec une pâte travaillée sur place et des garnitures généreuses. Une adresse appréciée pour son accueil chaleureux autant que pour ses pizzas.</p>
+    </div>
+  </div>
+</section>
 
-            <a href="#accueil" class="logo">
-                Pizzeria <span>Andiamo</span>
-            </a>
+<section id="menu">
+  <div class="wrap">
+    <p class="eyebrow">La carte</p>
+    <h2 class="section-title">Nos pizzas &amp; gourmandises</h2>
+    <p style="opacity:.65; font-size:0.85rem; margin-top:8px;">Prix indicatifs à titre d'exemple — à ajuster selon la carte réelle.</p>
 
-            <nav class="nav">
-                <a href="#carte">Carte</a>
-                <a href="#apropos">À propos</a>
-                <a href="#contact">Contact</a>
-            </nav>
+    <div class="menu-cat">
+      <h3>Pizzas classiques</h3>
+      <div class="menu-item"><div class="mi-left"><div class="mi-name">Margherita</div><div class="mi-desc">Sauce tomate, mozzarella, basilic</div></div><div class="mi-right"><span class="mi-price">9,50 €</span><button class="add-btn" onclick="addToCart('Margherita',9.5)">+</button></div></div>
+      <div class="menu-item"><div class="mi-left"><div class="mi-name">Reine</div><div class="mi-desc">Jambon, champignons, mozzarella</div></div><div class="mi-right"><span class="mi-price">11,50 €</span><button class="add-btn" onclick="addToCart('Reine',11.5)">+</button></div></div>
+      <div class="menu-item"><div class="mi-left"><div class="mi-name">Végétarienne</div><div class="mi-desc">Poivrons, olives, oignons, champignons</div></div><div class="mi-right"><span class="mi-price">11,50 €</span><button class="add-btn" onclick="addToCart('Végétarienne',11.5)">+</button></div></div>
+      <div class="menu-item"><div class="mi-left"><div class="mi-name">4 Fromages</div><div class="mi-desc">Mozzarella, chèvre, bleu, emmental</div></div><div class="mi-right"><span class="mi-price">12,50 €</span><button class="add-btn" onclick="addToCart('4 Fromages',12.5)">+</button></div></div>
+    </div>
 
-            <div class="header-actions">
+    <div class="menu-cat">
+      <h3>Pizzas spéciales</h3>
+      <div class="menu-item"><div class="mi-left"><div class="mi-name">Chèvre miel</div><div class="mi-desc">Chèvre, miel, noix, mozzarella</div></div><div class="mi-right"><span class="mi-price">12,90 €</span><button class="add-btn" onclick="addToCart('Chèvre miel',12.9)">+</button></div></div>
+      <div class="menu-item"><div class="mi-left"><div class="mi-name">Mortadelle &amp; olives</div><div class="mi-desc">Mortadelle, olives noires, mozzarella</div></div><div class="mi-right"><span class="mi-price">12,50 €</span><button class="add-btn" onclick="addToCart('Mortadelle & olives',12.5)">+</button></div></div>
+      <div class="menu-item"><div class="mi-left"><div class="mi-name">Calzone</div><div class="mi-desc">Pizza fermée, jambon, fromage, œuf</div></div><div class="mi-right"><span class="mi-price">12,00 €</span><button class="add-btn" onclick="addToCart('Calzone',12.0)">+</button></div></div>
+    </div>
 
-                <a
-                    class="phone-button"
-                    href="tel:0557231756"
-                >
-                    05 57 23 17 56
-                </a>
+    <div class="menu-cat">
+      <h3>Snacking</h3>
+      <div class="menu-item"><div class="mi-left"><div class="mi-name">Kebab frites</div><div class="mi-desc">Viande, crudités, sauce au choix, frites maison</div></div><div class="mi-right"><span class="mi-price">9,00 €</span><button class="add-btn" onclick="addToCart('Kebab frites',9.0)">+</button></div></div>
+      <div class="menu-item"><div class="mi-left"><div class="mi-name">Boisson 33cl</div><div class="mi-desc">Coca-Cola, Orangina, eau...</div></div><div class="mi-right"><span class="mi-price">2,50 €</span><button class="add-btn" onclick="addToCart('Boisson 33cl',2.5)">+</button></div></div>
+    </div>
+  </div>
+</section>
 
-                <button
-                    class="cart-button"
-                    id="openCart"
-                    type="button"
-                >
-                    🛒
-                    <span id="cartCount">0</span>
-                </button>
+<section style="background:var(--cream-2);">
+  <div class="wrap">
+    <p class="eyebrow">Réalisations</p>
+    <h2 class="section-title">Ça sort du four</h2>
+    <div class="gallery-strip">
+      <figure class="g-card"><img src="images/pizza_olive.jpg" alt="Pizza mortadelle et olives"><figcaption>Mortadelle & olives</figcaption></figure>
+      <figure class="g-card"><img src="images/pizza_cheese.jpg" alt="Pizza au fromage gratinée"><figcaption>Pizza gratinée maison</figcaption></figure>
+      <figure class="g-card"><img src="images/kebab.jpg" alt="Kebab frites maison"><figcaption>Kebab frites maison</figcaption></figure>
+    </div>
+  </div>
+</section>
 
-            </div>
+<section id="contact">
+  <div class="wrap">
+    <p class="eyebrow">Nous trouver</p>
+    <h2 class="section-title">Infos pratiques</h2>
+    <div class="contact-grid">
+      <div class="info-block">
+        <div>Téléphone</div>
+        <a class="phone" href="tel:+33557231756">05 57 23 17 56</a>
+        <dl>
+          <dt>Adresse</dt><dd>20 Av. du Général de Gaulle, 33450 Izon</dd>
+          <dt>Horaires</dt><dd>Mar–Sam 11h–14h &amp; 18h–21h · Dim 18h–21h · Fermé le lundi</dd>
+        </dl>
+      </div>
+      <div class="info-block">
+        <div style="font-weight:700; margin-bottom:8px;">Comment ça marcherait</div>
+        <p style="font-size:0.9rem; opacity:.85; margin:0;">Ajoutez des pizzas au panier, réglez en ligne, et l'équipe reçoit uniquement les commandes déjà payées — avec l'heure de retrait à préparer. Testez la démo ci-dessous :</p>
+        <button class="btn btn-primary" style="margin-top:14px;" onclick="openCart()">Essayer la commande en ligne</button>
+      </div>
+    </div>
+  </div>
+</section>
 
+<footer>
+  <div class="wrap">
+    <span>Pizzeria Andiamo — 20 Av. du Général de Gaulle, 33450 Izon</span>
+    <a href="#" onclick="showAdminLogin(); return false;">Espace professionnel</a>
+  </div>
+</footer>
+</div>
+
+<!-- CART OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="drawer" id="drawer">
+  <button class="close-x" onclick="closeCart()">&times;</button>
+  <h3 id="drawerTitle">Votre panier</h3>
+  <div class="drawer-items" id="drawerItems"></div>
+  <div class="drawer-total"><span>Total</span><span id="drawerTotal">0,00 €</span></div>
+  <button class="btn btn-primary" id="toCheckoutBtn" onclick="goToCheckout()">Passer commande</button>
+  <div class="checkout-fields" id="checkoutFields">
+    <label>Prénom / Nom</label>
+    <input type="text" id="custName" placeholder="Votre nom">
+    <label>Téléphone</label>
+    <input type="tel" id="custPhone" placeholder="06 12 34 56 78">
+    <label>Heure de retrait souhaitée</label>
+    <input type="time" id="custTime">
+    <button class="btn btn-primary" onclick="fakePay()">Payer maintenant (démo)</button>
+    <p style="font-size:0.72rem; opacity:.6;">Paiement fictif — aucune somme n'est prélevée. Ceci illustre le futur parcours de commande.</p>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="adminView">
+  <div class="admin-login" id="adminLogin">
+    <h3>Espace professionnel</h3>
+    <p style="font-size:0.85rem; opacity:.7;">Connexion (démo)</p>
+    <input type="email" id="adminEmail" placeholder="Adresse e-mail">
+    <input type="password" id="adminPass" placeholder="Mot de passe">
+    <button class="btn btn-primary" style="width:100%;" onclick="tryAdminLogin()">Se connecter</button>
+    <p style="font-size:0.72rem; opacity:.55; margin-top:10px;">Démo : n'importe quel e-mail + mot de passe « andiamo ».</p>
+    <p style="margin-top:14px;"><a href="#" onclick="hideAdmin(); return false;" style="font-size:0.8rem;">&larr; Retour au site</a></p>
+  </div>
+  <div id="adminPanel" style="display:none;">
+    <div class="admin-bar">
+      <strong>Commandes — Pizzeria Andiamo</strong>
+      <a href="#" onclick="hideAdmin(); return false;">Retour au site</a>
+    </div>
+    <div class="invoices-bar">
+      <div class="invoices-box">
+        <h4>Factures — par mois</h4>
+        <div class="row">
+          <select id="monthSelect"></select>
+          <button onclick="downloadInvoice('month')">Télécharger le PDF</button>
         </div>
-
-    </header>
-
-
-    <!-- ================= HERO ================= -->
-
-    <main>
-
-        <section class="hero" id="accueil">
-
-            <div class="container hero-grid">
-
-                <div class="hero-content">
-
-                    <p class="eyebrow">
-                        Izon · Fait maison
-                    </p>
-
-                    <h1>
-                        Des pizzas artisanales,
-                        <span>cuites avec le sourire.</span>
-                    </h1>
-
-                    <p class="hero-text">
-                        Une pâte préparée avec soin, des produits sélectionnés
-                        et des pizzas généreuses à déguster sur place ou à emporter.
-                    </p>
-
-                    <div class="hero-buttons">
-
-                        <a
-                            href="#carte"
-                            class="button button-primary"
-                        >
-                            Voir la carte
-                        </a>
-
-                        <a
-                            href="tel:0557231756"
-                            class="button button-secondary"
-                        >
-                            Appeler
-                        </a>
-
-                    </div>
-
-                    <p class="demo-label">
-                        Site de démonstration
-                    </p>
-
-                </div>
-
-
-                <div class="hero-image">
-
-                    <img
-                        src="images/hero_building.jpg"
-                        alt="Pizzeria Andiamo à Izon"
-                    >
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ================= À PROPOS ================= -->
-
-        <section class="about section" id="apropos">
-
-            <div class="container about-grid">
-
-                <div class="about-image">
-
-                    <img
-                        src="images/staff.jpg"
-                        alt="Équipe de la Pizzeria Andiamo"
-                    >
-
-                </div>
-
-                <div class="about-content">
-
-                    <p class="eyebrow">
-                        Notre histoire
-                    </p>
-
-                    <h2>
-                        Une pizzeria de quartier
-                    </h2>
-
-                    <p>
-                        Chez Andiamo, chaque pizza est préparée à la commande.
-                        La pâte est travaillée sur place et les garnitures sont
-                        choisies pour proposer une cuisine simple, généreuse
-                        et conviviale.
-                    </p>
-
-                    <p>
-                        Notre objectif est simple : vous proposer un bon repas,
-                        rapidement, avec un accueil chaleureux.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ================= CARTE ================= -->
-
-        <section class="menu section" id="carte">
-
-            <div class="container">
-
-                <div class="section-heading">
-
-                    <p class="eyebrow">
-                        La carte
-                    </p>
-
-                    <h2>
-                        Nos pizzas & gourmandises
-                    </h2>
-
-                    <p>
-                        Prix indicatifs — à remplacer par les prix réels
-                        de l'établissement.
-                    </p>
-
-                </div>
-
-
-                <!-- PIZZAS CLASSIQUES -->
-
-                <div class="menu-category">
-
-                    <h3>
-                        Pizzas classiques
-                    </h3>
-
-                    <div class="menu-grid">
-
-                        <article class="menu-card">
-
-                            <div>
-                                <h4>Margherita</h4>
-
-                                <p>
-                                    Tomate, mozzarella, basilic
-                                </p>
-                            </div>
-
-                            <div class="menu-card-bottom">
-
-                                <strong>9,50 €</strong>
-
-                                <button
-                                    type="button"
-                                    onclick="addToCart('Margherita', 9.50)"
-                                >
-                                    +
-                                </button>
-
-                            </div>
-
-                        </article>
-
-
-                        <article class="menu-card">
-
-                            <div>
-                                <h4>Reine</h4>
-
-                                <p>
-                                    Tomate, mozzarella, jambon, champignons
-                                </p>
-                            </div>
-
-                            <div class="menu-card-bottom">
-
-                                <strong>11,50 €</strong>
-
-                                <button
-                                    type="button"
-                                    onclick="addToCart('Reine', 11.50)"
-                                >
-                                    +
-                                </button>
-
-                            </div>
-
-                        </article>
-
-
-                        <article class="menu-card">
-
-                            <div>
-                                <h4>Végétarienne</h4>
-
-                                <p>
-                                    Tomate, mozzarella, légumes
-                                </p>
-                            </div>
-
-                            <div class="menu-card-bottom">
-
-                                <strong>11,50 €</strong>
-
-                                <button
-                                    type="button"
-                                    onclick="addToCart('Végétarienne', 11.50)"
-                                >
-                                    +
-                                </button>
-
-                            </div>
-
-                        </article>
-
-
-                        <article class="menu-card">
-
-                            <div>
-                                <h4>4 Fromages</h4>
-
-                                <p>
-                                    Mozzarella, chèvre, bleu, emmental
-                                </p>
-                            </div>
-
-                            <div class="menu-card-bottom">
-
-                                <strong>12,50 €</strong>
-
-                                <button
-                                    type="button"
-                                    onclick="addToCart('4 Fromages', 12.50)"
-                                >
-                                    +
-                                </button>
-
-                            </div>
-
-                        </article>
-
-                    </div>
-
-                </div>
-
-
-                <!-- PIZZAS SPÉCIALES -->
-
-                <div class="menu-category">
-
-                    <h3>
-                        Pizzas spéciales
-                    </h3>
-
-                    <div class="menu-grid">
-
-                        <article class="menu-card">
-
-                            <div>
-                                <h4>Chèvre miel</h4>
-
-                                <p>
-                                    Chèvre, mozzarella, miel
-                                </p>
-                            </div>
-
-                            <div class="menu-card-bottom">
-
-                                <strong>12,90 €</strong>
-
-                                <button
-                                    type="button"
-                                    onclick="addToCart('Chèvre miel', 12.90)"
-                                >
-                                    +
-                                </button>
-
-                            </div>
-
-                        </article>
-
-
-                        <article class="menu-card">
-
-                            <div>
-                                <h4>Mortadelle & olives</h4>
-
-                                <p>
-                                    Mortadelle, mozzarella, olives
-                                </p>
-                            </div>
-
-                            <div class="menu-card-bottom">
-
-                                <strong>12,50 €</strong>
-
-                                <button
-                                    type="button"
-                                    onclick="addToCart('Mortadelle & olives', 12.50)"
-                                >
-                                    +
-                                </button>
-
-                            </div>
-
-                        </article>
-
-
-                        <article class="menu-card">
-
-                            <div>
-                                <h4>Calzone</h4>
-
-                                <p>
-                                    Pizza fermée, jambon, fromage
-                                </p>
-                            </div>
-
-                            <div class="menu-card-bottom">
-
-                                <strong>12,00 €</strong>
-
-                                <button
-                                    type="button"
-                                    onclick="addToCart('Calzone', 12.00)"
-                                >
-                                    +
-                                </button>
-
-                            </div>
-
-                        </article>
-
-                    </div>
-
-                </div>
-
-
-                <!-- SNACKING -->
-
-                <div class="menu-category">
-
-                    <h3>
-                        Snacking
-                    </h3>
-
-                    <div class="menu-grid">
-
-                        <article class="menu-card">
-
-                            <div>
-                                <h4>Kebab frites</h4>
-
-                                <p>
-                                    Kebab, crudités, sauce, frites
-                                </p>
-                            </div>
-
-                            <div class="menu-card-bottom">
-
-                                <strong>9,00 €</strong>
-
-                                <button
-                                    type="button"
-                                    onclick="addToCart('Kebab frites', 9.00)"
-                                >
-                                    +
-                                </button>
-
-                            </div>
-
-                        </article>
-
-
-                        <article class="menu-card">
-
-                            <div>
-                                <h4>Boisson 33cl</h4>
-
-                                <p>
-                                    Boisson fraîche
-                                </p>
-                            </div>
-
-                            <div class="menu-card-bottom">
-
-                                <strong>2,50 €</strong>
-
-                                <button
-                                    type="button"
-                                    onclick="addToCart('Boisson 33cl', 2.50)"
-                                >
-                                    +
-                                </button>
-
-                            </div>
-
-                        </article>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ================= GALERIE ================= -->
-
-        <section class="gallery section">
-
-            <div class="container">
-
-                <div class="section-heading">
-
-                    <p class="eyebrow">
-                        Chez Andiamo
-                    </p>
-
-                    <h2>
-                        Simple, généreux, gourmand.
-                    </h2>
-
-                </div>
-
-
-                <div class="gallery-grid">
-
-                    <img
-                        src="images/pizza-olive.jpg"
-                        alt="Pizza aux olives"
-                    >
-
-                    <img
-                        src="images/pizza-cheese.jpg"
-                        alt="Pizza au fromage"
-                    >
-
-                    <img
-                        src="images/kebab.jpg"
-                        alt="Kebab avec frites"
-                    >
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ================= CONTACT ================= -->
-
-        <section class="contact section" id="contact">
-
-            <div class="container contact-grid">
-
-                <div>
-
-                    <p class="eyebrow">
-                        Nous trouver
-                    </p>
-
-                    <h2>
-                        Venez nous voir à Izon
-                    </h2>
-
-                    <p>
-                        Une question ? Une commande ?
-                        Contactez directement la pizzeria.
-                    </p>
-
-                </div>
-
-
-                <div class="contact-card">
-
-                    <div class="contact-item">
-
-                        <span>📞</span>
-
-                        <div>
-                            <strong>Téléphone</strong>
-                            <a href="tel:0557231756">
-                                05 57 23 17 56
-                            </a>
-                        </div>
-
-                    </div>
-
-
-                    <div class="contact-item">
-
-                        <span>📍</span>
-
-                        <div>
-                            <strong>Adresse</strong>
-
-                            <p>
-                                20 Av. du Général de Gaulle,
-                                33450 Izon
-                            </p>
-                        </div>
-
-                    </div>
-
-
-                    <div class="contact-item">
-
-                        <span>🕐</span>
-
-                        <div>
-
-                            <strong>Horaires</strong>
-
-                            <p>
-                                Mar–Sam : 11h–14h & 18h–21h<br>
-                                Dim : 18h–21h<br>
-                                Fermé le lundi
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-    </main>
-
-
-    <!-- ================= CART DRAWER ================= -->
-
-    <aside
-        class="cart-drawer"
-        id="cartDrawer"
-        aria-hidden="true"
-    >
-
-        <div class="cart-header">
-
-            <h2>
-                Votre commande
-            </h2>
-
-            <button
-                type="button"
-                id="closeCart"
-                aria-label="Fermer"
-            >
-                ×
-            </button>
-
+      </div>
+      <div class="invoices-box">
+        <h4>Factures — par année</h4>
+        <div class="row">
+          <select id="yearSelect"></select>
+          <button onclick="downloadInvoice('year')">Télécharger le PDF</button>
         </div>
+      </div>
+    </div>
+    <div class="kanban">
+      <div class="col new"><h4>Nouvelle</h4><div id="col-new"></div></div>
+      <div class="col progress"><h4>En préparation</h4><div id="col-progress"></div></div>
+      <div class="col done"><h4>Prête</h4><div id="col-done"></div></div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
 
-
-        <div
-            class="cart-items"
-            id="cartItems"
-        >
-            <p class="empty-cart">
-                Votre panier est vide.
-            </p>
-        </div>
-
-
-        <div class="cart-footer">
-
-            <div class="cart-total">
-
-                <span>
-                    Total
-                </span>
-
-                <strong id="cartTotal">
-                    0,00 €
-                </strong>
-
-            </div>
-
-
-            <label>
-                Votre nom
-
-                <input
-                    type="text"
-                    id="customerName"
-                    placeholder="Nom"
-                >
-            </label>
-
-
-            <label>
-                Téléphone
-
-                <input
-                    type="tel"
-                    id="customerPhone"
-                    placeholder="06..."
-                >
-            </label>
-
-
-            <label>
-                Heure souhaitée
-
-                <input
-                    type="time"
-                    id="pickupTime"
-                >
-            </label>
-
-
-            <button
-                type="button"
-                class="button button-primary full-width"
-                id="checkoutButton"
-            >
-                Payer maintenant
-            </button>
-
-
-            <p class="demo-note">
-                Démonstration : aucun paiement réel n'est effectué.
-            </p>
-
-        </div>
-
-    </aside>
-
-
-    <div
-        class="cart-overlay"
-        id="cartOverlay"
-    ></div>
-
-
-    <!-- ================= ESPACE PROFESSIONNEL ================= -->
-
-    <section class="admin section">
-
-        <div class="container">
-
-            <div class="section-heading">
-
-                <p class="eyebrow">
-                    Démonstration
-                </p>
-
-                <h2>
-                    Espace professionnel
-                </h2>
-
-                <p>
-                    Interface de démonstration pour gérer les commandes.
-                </p>
-
-            </div>
-
-
-            <div class="admin-login">
-
-                <input
-                    type="email"
-                    id="adminEmail"
-                    placeholder="Email"
-                >
-
-                <input
-                    type="password"
-                    id="adminPassword"
-                    placeholder="Mot de passe"
-                >
-
-                <button
-                    type="button"
-                    class="button button-primary"
-                    id="adminLoginButton"
-                >
-                    Se connecter
-                </button>
-
-            </div>
-
-
-            <div
-                class="admin-panel"
-                id="adminPanel"
-                hidden
-            >
-
-                <div class="admin-top">
-
-                    <h3>
-                        Commandes
-                    </h3>
-
-                    <div>
-
-                        <button
-                            type="button"
-                            id="monthlyInvoice"
-                        >
-                            Facture mensuelle
-                        </button>
-
-                        <button
-                            type="button"
-                            id="yearlyInvoice"
-                        >
-                            Facture annuelle
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="kanban">
-
-                    <div class="kanban-column">
-
-                        <h4>
-                            Nouvelle
-                        </h4>
-
-                        <div
-                            id="newOrders"
-                            class="order-list"
-                        ></div>
-
-                    </div>
-
-
-                    <div class="kanban-column">
-
-                        <h4>
-                            En préparation
-                        </h4>
-
-                        <div
-                            id="preparingOrders"
-                            class="order-list"
-                        ></div>
-
-                    </div>
-
-
-                    <div class="kanban-column">
-
-                        <h4>
-                            Prête
-                        </h4>
-
-                        <div
-                            id="readyOrders"
-                            class="order-list"
-                        ></div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ================= FOOTER ================= -->
-
-    <footer class="footer">
-
-        <div class="container footer-inner">
-
-            <div>
-                <strong>
-                    Pizzeria Andiamo
-                </strong>
-
-                <p>
-                    Izon · Gironde
-                </p>
-            </div>
-
-
-            <div>
-
-                <a href="#accueil">
-                    Accueil
-                </a>
-
-                <a href="#carte">
-                    Carte
-                </a>
-
-                <a href="#contact">
-                    Contact
-                </a>
-
-            </div>
-
-        </div>
-
-    </footer>
 
 
     <script src="script.js"></script>
