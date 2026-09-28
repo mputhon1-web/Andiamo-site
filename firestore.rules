@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Comptes autorisés à voir les commandes (gérante + cuisine).
+    // Ajoutez l'adresse e-mail du compte "cuisine" ici quand il sera créé.
+    function isStaff() {
+      return request.auth != null
+        && request.auth.token.email in ['m.puton1@gmail.com'];
+    }
+
+    match /orders/{orderId} {
+      // Personne ne peut créer de commande depuis le navigateur :
+      // seules les commandes PAYÉES, enregistrées par le serveur, existent.
+      allow create: if false;
+      allow read, update, delete: if isStaff();
+    }
+  }
+}
