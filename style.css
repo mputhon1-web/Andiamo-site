@@ -93,6 +93,13 @@
   .drawer-item{display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid color-mix(in srgb, var(--ink) 10%, transparent); font-size:0.92rem; gap:8px;}
   .drawer-item button{background:none; border:none; color:var(--tomato); cursor:pointer; font-size:1rem;}
   .drawer-total{display:flex; justify-content:space-between; font-weight:700; font-size:1.1rem; padding:12px 0;}
+  .banner{
+    position:fixed; left:50%; top:calc(14px + env(safe-area-inset-top,0px)); transform:translate(-50%,-140%);
+    z-index:200; max-width:min(92vw,520px); padding:14px 18px; border-radius:10px; font-weight:600; font-size:0.95rem;
+    box-shadow:0 8px 28px rgba(0,0,0,.25); transition:transform .3s ease; color:#fff; background:#2f6b2f;
+  }
+  .banner.show{transform:translate(-50%,0);}
+  .banner.warn{background:#8a6a00;}
   .close-x{position:sticky; top:0; align-self:flex-end; background:var(--paper); border:none; font-size:1.4rem; cursor:pointer; color:var(--ink); z-index:2;}
 
   /* checkout form (inside drawer step 2) */
