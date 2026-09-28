@@ -7,7 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script type="module" src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.3.0/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.3.0/firebase-auth-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.3.0/firebase-firestore-compat.min.js"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -124,6 +127,8 @@
 </footer>
 </div>
 
+<div class="banner" id="banner" role="status" aria-live="polite"></div>
+
 <button class="cart-fab" id="cartFab" onclick="openCart()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
   <span id="cartCount">0</span>
@@ -135,7 +140,7 @@
   <button class="close-x" onclick="closeCart()">&times;</button>
   <h3 id="drawerTitle">Votre panier</h3>
   <div class="drawer-items" id="drawerItems"></div>
-  <div class="drawer-total"><span>Total</span><span id="drawerTotal">0,00 €</span></div>
+  <div class="drawer-total"><span>Total TTC</span><span id="drawerTotal">0,00 €</span></div>
   <button class="btn btn-primary" id="toCheckoutBtn" onclick="goToCheckout()">Passer commande</button>
   <div class="checkout-fields" id="checkoutFields">
     <label>Prénom / Nom</label>
@@ -164,8 +169,9 @@
 
     <label>Heure souhaitée</label>
     <select id="custTime" style="width:100%; font:inherit; padding:10px 11px; border:1.5px solid color-mix(in srgb, var(--ink) 22%, transparent); border-radius:4px; background:var(--paper); color:var(--ink);"></select>
-    <button class="btn btn-primary" onclick="fakePay()">Payer maintenant (démo)</button>
-    <p style="font-size:0.72rem; opacity:.6;">Paiement fictif — aucune somme n'est prélevée. Ceci illustre le futur parcours de commande.</p>
+    <button class="btn btn-primary" id="payBtn" onclick="checkout()">Commander avec obligation de paiement</button>
+    <p style="font-size:0.75rem; opacity:.7; margin:0;">🔒 Paiement par carte sécurisé par Stripe. Vos données bancaires ne transitent jamais par ce site.</p>
+    <p id="testHint" style="display:none; font-size:0.75rem; background:#FFF6DE; color:#5a4300; padding:8px 10px; border-radius:6px; margin:0;"></p>
   </div>
 </div>
 
@@ -173,11 +179,11 @@
 <div id="adminView">
   <div class="admin-login" id="adminLogin">
     <h3>Espace professionnel</h3>
-    <p style="font-size:0.85rem; opacity:.7;">Connexion (démo)</p>
+    <p style="font-size:0.85rem; opacity:.7;">Connexion</p>
     <input type="email" id="adminEmail" placeholder="Adresse e-mail">
     <input type="password" id="adminPass" placeholder="Mot de passe">
     <button class="btn btn-primary" style="width:100%;" onclick="tryAdminLogin()">Se connecter</button>
-    <p style="font-size:0.72rem; opacity:.55; margin-top:10px;">Démo : mot de passe « andiamo » pour la gérante, « cuisine » pour l'équipe en préparation.</p>
+    <p style="font-size:0.72rem; opacity:.55; margin-top:10px;">Connectez-vous avec le compte créé pour la gérante ou celui créé pour l'équipe en cuisine.</p>
     <p style="margin-top:14px;"><a href="#" onclick="hideAdmin(); return false;" style="font-size:0.8rem;">&larr; Retour au site</a></p>
   </div>
   <div id="adminPanel" style="display:none;">
@@ -209,5 +215,6 @@
   </div>
 </div>
 
+<script src="script.js"></script>
 </body>
 </html>
